@@ -8,11 +8,13 @@
       body {
         text-transform: uppercase;
         background-color: #232323;
+        margin: 0; /* removes the space on the sides of header and subheader */
+        font-family: "Montserrat", "Avenir";
       }
 
       #container {
         max-width: 600px;
-        margin: 0 auto;
+        margin: 20px auto;
         background-color: #232323;
       }
 
@@ -21,12 +23,26 @@
         width: 30%;
         float: left;
         padding-bottom: 30%;
+        border-radius: 15%;
+        transition: background 2.0s;
+        /* browser support */
+        --webkit-transition: background 2.0s;
+        --moz-transition: background 2.0s;
       }
 
       #header {
         color: white;
         text-align: center;
-        background-color: blue;
+        background-color: steelblue;
+        padding: 10px 0;
+      }
+
+      #guess {
+        font-size: 2rem;
+      }
+
+      h3 {
+        font-weight: normal;
       }
 
       ul {
@@ -43,14 +59,17 @@
 
       li a, #message {
         display: block;
-        color: blue;
+        color: steelblue;
         text-align: center;
         padding: 6px;
         text-decoration: none;
+        transition: all 2.0s; /* how to animate : all - what we want to transition, anytime every property at any a tag changes it takes 2 seconds to fade out */
+        --webkit-transition: all 2.0s;
+        --moz-transition: all 2.0s;
       }
 
       li a.active, li a:hover {
-        background-color: blue;
+        background-color: steelblue;
         color: white;
       }
 
@@ -59,7 +78,7 @@
 
   <body>
 
-    <div id="header">the great <h3 id="guess"></h3> guessing game</div>
+    <div id="header">the great <span id="guess"></span> guessing game</div>
     <div id="subheader">
       <ul>
         <li><a href="#" id="new">new color</a></li>
@@ -117,8 +136,9 @@
         colorObj.data.guess = colorObj.data.colors[Math.floor(Math.random()*colorObj.data.colors.length)];
         
         document.getElementById("guess").textContent = colorObj.data.guess;
-        document.getElementById("header").style.backgroundColor = 'blue';
+        document.getElementById("header").style.backgroundColor = 'steelblue';
         document.getElementById("message").textContent = '';
+        document.getElementById("new").textContent = 'new color';
 
         for (var i=0; i<colorObj.data.squares.length; i++) {
           colorObj.data.squares[i].style.backgroundColor = colorObj.data.colors[i];
@@ -126,6 +146,7 @@
           if (colorObj.data.guess === this.style.backgroundColor) {
             colorObj.changeColors();
             document.getElementById("message").textContent = 'Correct!';
+            document.getElementById("new").textContent = 'Play Again?';
           } else {
             this.style.backgroundColor = '#232323';
             document.getElementById("message").textContent = 'Try Again!';
