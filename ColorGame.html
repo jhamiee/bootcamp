@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Color Game</title>
+    <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <style type="text/css">
+      body {
+        text-transform: uppercase;
+        background: #232323;
+      }
+
+      #container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #232323;
+      }
+
+      .square {
+        margin: 1.66%;
+        width: 30%;
+        float: left;
+        padding-bottom: 30%;
+      }
+
+      #header {
+        color: white;
+        text-align: center;
+        background: blue;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #ffffff;
+      }
+
+      li {
+        float: left;
+      }
+
+      li a {
+        display: block;
+        color: blue;
+        text-align: center;
+        padding: 6px;
+        text-decoration: none;
+      }
+
+      li a.active {
+        background-color: blue;
+        color: white;
+      }
+
+    </style>
+  </head>
+
+  <body>
+
+    <div id="header">the great <h3 id="guess"></h3> guessing game</div>
+    <ul>
+      <li><a href="#" id="new">new color</a></li>
+      <li><a href="#" id="easy" class="right">easy</a></li>
+      <li><a href="#" id="hard" class="right active">hard</a></li>
+    </ul>
+    <div id="container">
+      <div class="square" ></div>
+      <div class="square" ></div>
+      <div class="square" ></div>
+      <div class="square" ></div>
+      <div class="square" ></div>
+      <div class="square" ></div>
+    </div>
+
+    <script type="text/javascript">
+      var colorObj = {
+        data : {
+          colors : null,
+          guess : null,
+          squares : null
+        },
+        initColors : function() {
+          var colors = [];
+          for (var i=0; i<this.data.squares.length; i++) {
+            var temp = colorObj.generateColor();
+            colors.push(temp);
+          }
+          console.log("init colors");
+          return colors;
+        },
+        generateColor : function() {
+          var color = [];
+          for (var i=0; i<3; i++) {
+            var rand = Math.floor(Math.random() * 255);
+            color.push(rand);
+          }
+          var rgb = color.join(', ');
+          
+          return "rgb("+rgb+")";
+        },
+        changeColors : function() {
+          for (var i=0; i<this.data.squares.length; i++) {
+             this.data.squares[i].style.background = this.data.colors[this.data.guess];
+          }
+        }
+      }
+
+      function init() {
+        colorObj.data.squares = document.querySelectorAll(".square");
+        colorObj.data.colors = colorObj.initColors();
+        colorObj.data.guess = Math.floor(Math.random()*colorObj.data.colors.length);
+        
+        document.getElementById("guess").textContent = colorObj.data.colors[colorObj.data.guess];
+
+        for (var i=0; i<colorObj.data.squares.length; i++) {
+          console.log("here");
+          colorObj.data.squares[i].style.background = colorObj.data.colors[i];
+          colorObj.data.squares[i].addEventListener("click", function(){
+          if (colorObj.data.colors[colorObj.data.guess] === this.style.background) {
+            colorObj.changeColors();
+          } else {
+            this.style.background = '#232323';
+          }
+        })
+        }
+      }
+
+      function drawSquare(count) {
+        var content = '';
+        for (var i=0; i<count; i++) {
+          content = content + "<div class=\"square\"></div>";
+        }
+        document.getElementById("container").innerHTML = content;
+      }
+
+      function toggelTab() {
+        document.getElementById("easy").classList.toggle("active");
+        document.getElementById("hard").classList.toggle("active");
+      }
+
+      var newGame = document.getElementById("new");
+      newGame.addEventListener('click', function(){
+        init();
+      });
+
+      var easy = document.getElementById("easy");
+      easy.addEventListener('click', function(){
+        drawSquare(3);
+        init();
+        toggelTab();
+      });
+
+      var hard = document.getElementById("hard");
+      hard.addEventListener('click', function(){
+        drawSquare(6);
+        init();
+        toggelTab();
+      });
+
+      init();
+
+    </script>
+  </body>
+</html>
