@@ -7,13 +7,13 @@
     <style type="text/css">
       body {
         text-transform: uppercase;
-        background: #232323;
+        background-color: #232323;
       }
 
       #container {
         max-width: 600px;
         margin: 0 auto;
-        background: #232323;
+        background-color: #232323;
       }
 
       .square {
@@ -26,7 +26,7 @@
       #header {
         color: white;
         text-align: center;
-        background: blue;
+        background-color: blue;
       }
 
       ul {
@@ -41,7 +41,7 @@
         float: left;
       }
 
-      li a {
+      li a, #message {
         display: block;
         color: blue;
         text-align: center;
@@ -49,7 +49,7 @@
         text-decoration: none;
       }
 
-      li a.active {
+      li a.active, li a:hover {
         background-color: blue;
         color: white;
       }
@@ -60,11 +60,14 @@
   <body>
 
     <div id="header">the great <h3 id="guess"></h3> guessing game</div>
-    <ul>
-      <li><a href="#" id="new">new color</a></li>
-      <li><a href="#" id="easy" class="right">easy</a></li>
-      <li><a href="#" id="hard" class="right active">hard</a></li>
-    </ul>
+    <div id="subheader">
+      <ul>
+        <li><a href="#" id="new">new color</a></li>
+        <li><a href="#" id="easy" class="right">easy</a></li>
+        <li><a href="#" id="hard" class="right active">hard</a></li>
+        <span id="message"></span>
+      </ul>
+    </div>
     <div id="container">
       <div class="square" ></div>
       <div class="square" ></div>
@@ -87,13 +90,12 @@
             var temp = colorObj.generateColor();
             colors.push(temp);
           }
-          console.log("init colors");
           return colors;
         },
         generateColor : function() {
           var color = [];
           for (var i=0; i<3; i++) {
-            var rand = Math.floor(Math.random() * 255);
+            var rand = Math.floor(Math.random() * 256); // to include 255
             color.push(rand);
           }
           var rgb = color.join(', ');
@@ -101,8 +103,10 @@
           return "rgb("+rgb+")";
         },
         changeColors : function() {
+          console.log(this.data.guess);
+          document.getElementById("header").style.backgroundColor = this.data.guess;
           for (var i=0; i<this.data.squares.length; i++) {
-             this.data.squares[i].style.background = this.data.colors[this.data.guess];
+             this.data.squares[i].style.backgroundColor = this.data.guess;
           }
         }
       }
@@ -110,18 +114,21 @@
       function init() {
         colorObj.data.squares = document.querySelectorAll(".square");
         colorObj.data.colors = colorObj.initColors();
-        colorObj.data.guess = Math.floor(Math.random()*colorObj.data.colors.length);
+        colorObj.data.guess = colorObj.data.colors[Math.floor(Math.random()*colorObj.data.colors.length)];
         
-        document.getElementById("guess").textContent = colorObj.data.colors[colorObj.data.guess];
+        document.getElementById("guess").textContent = colorObj.data.guess;
+        document.getElementById("header").style.backgroundColor = 'blue';
+        document.getElementById("message").textContent = '';
 
         for (var i=0; i<colorObj.data.squares.length; i++) {
-          console.log("here");
-          colorObj.data.squares[i].style.background = colorObj.data.colors[i];
+          colorObj.data.squares[i].style.backgroundColor = colorObj.data.colors[i];
           colorObj.data.squares[i].addEventListener("click", function(){
-          if (colorObj.data.colors[colorObj.data.guess] === this.style.background) {
+          if (colorObj.data.guess === this.style.backgroundColor) {
             colorObj.changeColors();
+            document.getElementById("message").textContent = 'Correct!';
           } else {
-            this.style.background = '#232323';
+            this.style.backgroundColor = '#232323';
+            document.getElementById("message").textContent = 'Try Again!';
           }
         })
         }
