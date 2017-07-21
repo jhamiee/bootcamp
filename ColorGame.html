@@ -97,7 +97,7 @@
     </div>
 
     <script type="text/javascript">
-      var colorObj = {
+      var game = {
         data : {
           colors : null,
           guess : null,
@@ -106,7 +106,7 @@
         initColors : function() {
           var colors = [];
           for (var i=0; i<this.data.squares.length; i++) {
-            var temp = colorObj.generateColor();
+            var temp = game.generateColor();
             colors.push(temp);
           }
           return colors;
@@ -131,20 +131,20 @@
       }
 
       function init() {
-        colorObj.data.squares = document.querySelectorAll(".square");
-        colorObj.data.colors = colorObj.initColors();
-        colorObj.data.guess = colorObj.data.colors[Math.floor(Math.random()*colorObj.data.colors.length)];
+        game.data.squares = document.querySelectorAll(".square");
+        game.data.colors = game.initColors();
+        game.data.guess = game.data.colors[Math.floor(Math.random()*game.data.colors.length)];
         
-        document.getElementById("guess").textContent = colorObj.data.guess;
+        document.getElementById("guess").textContent = game.data.guess;
         document.getElementById("header").style.backgroundColor = 'steelblue';
         document.getElementById("message").textContent = '';
         document.getElementById("new").textContent = 'new color';
 
-        for (var i=0; i<colorObj.data.squares.length; i++) {
-          colorObj.data.squares[i].style.backgroundColor = colorObj.data.colors[i];
-          colorObj.data.squares[i].addEventListener("click", function(){
-            if (colorObj.data.guess === this.style.backgroundColor) {
-              colorObj.changeColors();
+        for (var i=0; i<game.data.squares.length; i++) {
+          game.data.squares[i].style.backgroundColor = game.data.colors[i];
+          game.data.squares[i].addEventListener("click", function(){
+            if (game.data.guess === this.style.backgroundColor) {
+              game.changeColors();
               document.getElementById("message").textContent = 'Correct!';
               document.getElementById("new").textContent = 'Play Again?';
             } else {
