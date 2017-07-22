@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tap</title>
+        <style type="text/css">
+            body {
+                background-color: #000000;
+                margin: 0;
+            }
+            #canvas {
+                width: 100%; /* to take the entire screen */
+            }
+        </style>
+        <script type="text/javascript" src="assets/js/lib/paper-full.js"></script>
+        <script type="text/javascript" src="assets/js/lib/howler-2.0.4.js"></script>
+        <script type="text/paperscript" canvas="canvas">
+            var data = {
+                a: {
+                    color: "red",
+                    sound: new Howl({src:['sounds/sound1.mp3']})
+                },
+                s: {
+                    color: "green",
+                    sound: new Howl({src:['sounds/sound1.mp3']})
+                },
+                d: {
+                    color: "blue",
+                    sound: new Howl({src:['sounds/sound1.mp3']})
+                }
+            };
+            var circles = [];
+            
+            function onKeyDown(event) {
+                if (data[event.key]) {
+                    var randPoint = new Point(Math.random(), Math.random()); // Point.random();
+                    var maxPoint = new Point(view.size.width, view.size.height);
+                    var coor = randPoint * maxPoint;
+                    
+                    var circle = new Path.Circle(coor, 80);
+                    circle.fillColor = data[event.key].color;
+                    
+                    circles.push(circle);
+                    data[event.key].sound.play();
+                }
+            }
+            
+            function onFrame(event) {
+                circles.forEach(function(value){
+                    value.fillColor.hue += 1;
+                    value.scaling = new Point(0.9, 0.9);
+                    console.log(value.scaling);
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <canvas id="canvas" resize stats hidpi="off" ></canvas>
+    </body>
+</html>
